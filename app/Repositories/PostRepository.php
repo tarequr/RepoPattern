@@ -9,7 +9,7 @@ class PostRepository implements PostRepositoryInterface
 {
     public function allPosts()
     {
-        return Post::orderBy('id', 'desc')->get();;
+        return Post::orderBy('id', 'desc')->get();
     }
 
     public function storePost($data)

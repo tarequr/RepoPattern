@@ -3,15 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Repositories\Interfaces\PostRepositoryInterface;
 
 class PostController extends Controller
 {
+    private $postRepository;
+
+    public function __construct(PostRepositoryInterface $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // return
+        $posts = $this->postRepository->allPosts();
+        return view('post.index', compact('posts'));
     }
 
     /**
@@ -19,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('post.create');
     }
 
     /**
@@ -27,7 +36,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
+        ]);
+
+        $this->postRepository->storePost($data);
+
+        return redirect()->route('posts.index')->with('message', 'Post Created Successfully');
     }
 
     /**
@@ -43,7 +59,9 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $post = $this->postRepository->findPost($id);
+
+        return view('posts.edit', compact('post'));
     }
 
     /**
@@ -51,7 +69,14 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
+        ]);
+
+        $this->postRepository->updatePost($request->all(), $id);
+
+        return redirect()->route('posts.index')->with('message', 'Post Updated Successfully');
     }
 
     /**
@@ -59,6 +84,8 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->postRepository->destroyPost($id);
+
+        return redirect()->route('posts.index')->with('status', 'Post Delete Successfully');
     }
 }
