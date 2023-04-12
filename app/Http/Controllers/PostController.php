@@ -36,12 +36,11 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
+        $request->validate([
+            'title' => 'required|string|max:255',
         ]);
 
-        $this->postRepository->storePost($data);
+        $this->postRepository->storePost($request->all());
 
         return redirect()->route('posts.index')->with('message', 'Post Created Successfully');
     }
