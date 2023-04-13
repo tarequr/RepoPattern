@@ -36,11 +36,21 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'title' => 'required|string|max:255',
         ]);
 
-        $this->postRepository->storePost($request->all());
+        $attributes = $request->only(['title', 'description','status']);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = 'IMG_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('upload/posts'), $filename);
+            $attributes['image'] = $filename;
+        }
+
+        $this->postRepository->storePost($attributes);
 
         return redirect()->route('posts.index')->with('message', 'Post Created Successfully');
     }

@@ -36,6 +36,11 @@
                 </div>
 
                 <div class="col-md-12" style="margin-top: 10px;">
+                    <input type="checkbox" class="custom-control-input" id="status" name="status" checked>
+                    <label for="status">Status</label>
+                </div>
+
+                <div class="col-md-12" style="margin-top: 10px;">
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
             </form>

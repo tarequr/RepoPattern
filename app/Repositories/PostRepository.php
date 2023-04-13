@@ -14,17 +14,12 @@ class PostRepository implements PostRepositoryInterface
 
     public function storePost($data)
     {
-        // dd($data['title']);
-
-        // if (isset($data['image'])) {
-        //     $file = isset($data['image']);
-        //     $filename = 'IMG_' . time() . '.' . $file->getClientOriginalExtension();
-        //     $file->move(public_path('upload/blogs'), $filename);
-        // }
         return Post::create([
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'publication_date' => date('Y-m-d')
+            'title'  => $data['title'],
+            'image'    => $data['image'],
+            'status'     => isset($data['status']) ? true : false,
+            'description'   => $data['description'],
+            'publication_date' => date('Y-m-d'),
         ]);
     }
 
