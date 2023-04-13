@@ -22,8 +22,11 @@
                     <thead>
                         <tr>
                             <th>Sl</th>
+                            <th>Image</th>
                             <th>Title</th>
                             <th>Description</th>
+                            <th>Date</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -31,8 +34,19 @@
                         @foreach ($posts as $post)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
+                            <td>
+                                <img src="{{ asset('upload/posts/'.$post->image) }}" class="image img-thumbnail" alt="" style="width: 80px; height: 80;">
+                            </td>
                             <td>{{ $post->title }}</td>
                             <td>{{ $post->description }}</td>
+                            <td>{{ date('d M, Y',strtotime($post->publication_date)) }}</td>
+                            <td>
+                                @if ($post->status == 1)
+                                    <span class="badge badge-success">Active</span>
+                                @else
+                                    <span class="badge badge-danger">InActive</span>
+                                @endif
+                            </td>
                             <td width="13%">
                                 <a href="{{ route('posts.edit',$post->id) }}" class="btn btn-success">Edit</a>
                                 <a href="{{ route('posts.destroy',$post->id) }}" class="btn btn-danger">Delete</a>
