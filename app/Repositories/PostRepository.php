@@ -30,10 +30,17 @@ class PostRepository implements PostRepositoryInterface
 
     public function updatePost($data, $id)
     {
-        $Post = Post::where('id', $id)->first();
-        $Post->name = $data['name'];
-        $Post->slug = $data['slug'];
-        $Post->save();
+        $post = Post::findOrFail($id);
+
+        if (isset($data['image'])) {
+            @unlink(public_path('upload/posts/' . $post->image));
+        }
+        return  $post->update([
+            'title'  => $data['title'],
+            'image'    => $data['image'] ?? $post->image,
+            'status'     => isset($data['status']) ? true : false,
+            'description'   => $data['description'],
+        ]);
     }
 
     public function destroyPost($id)

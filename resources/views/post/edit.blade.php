@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Create Post</title>
+    <title>Edit Post</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -17,17 +17,18 @@
 
     <div class="container">
         <div class="row">
-            <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('posts.update',$post->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
 
                 <div class="col-md-12">
                     <label for="">Title</label>
-                    <input type="text" class="form-control" name="title" placeholder="Enter title" required>
+                    <input type="text" class="form-control" name="title" value="{{ $post->title }}" placeholder="Enter title" required>
                 </div>
 
                 <div class="col-md-12" style="margin-top: 10px;">
                     <label for="description">Description</label>
-                    <textarea class="form-control" name="description" id="description" rows="10" placeholder="Type here..." required></textarea>
+                    <textarea class="form-control" name="description" id="description" rows="10" placeholder="Type here..." required>{{ $post->description }}</textarea>
                 </div>
 
                 <div class="col-md-12" style="margin-top: 10px;">
@@ -36,7 +37,7 @@
                 </div>
 
                 <div class="col-md-12" style="margin-top: 10px;">
-                    <input type="checkbox" class="custom-control-input" id="status" name="status" checked>
+                    <input type="checkbox" class="custom-control-input" id="status" name="status" {{ $post->status == true ? 'checked' : '' }}>
                     <label for="status">Status</label>
                 </div>
 

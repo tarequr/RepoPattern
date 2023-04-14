@@ -36,7 +36,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'title' => 'required|string|max:255',
         ]);
@@ -69,8 +68,7 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $post = $this->postRepository->findPost($id);
-
-        return view('posts.edit', compact('post'));
+        return view('post.edit', compact('post'));
     }
 
     /**
@@ -79,11 +77,19 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
         ]);
 
-        $this->postRepository->updatePost($request->all(), $id);
+        $attributes = $request->only(['title', 'description','status']);
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = 'IMG_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('upload/posts'), $filename);
+            $attributes['image'] = $filename;
+        }
+
+        $this->postRepository->updatePost($attributes, $id);
 
         return redirect()->route('posts.index')->with('message', 'Post Updated Successfully');
     }
